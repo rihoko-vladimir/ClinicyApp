@@ -1,4 +1,5 @@
 using Clinicy.WebApi.Models;
+using Clinicy.WebApi.Models.Entities;
 
 namespace Clinicy.WebApi.Interfaces.Repositories;
 
