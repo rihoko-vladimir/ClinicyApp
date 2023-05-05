@@ -5,7 +5,7 @@ namespace Clinicy.WebApi.Interfaces.Services;
 
 public interface IPatientsService
 {
-    public Task<Guid> CreatePatient(Patient patient);
+    public Task<Guid> CreatePatient(Patient patient, Guid patientId);
 
     public Task<Patient?> GetPatientById(Guid patientId);
 

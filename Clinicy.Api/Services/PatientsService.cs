@@ -14,9 +14,9 @@ public class PatientsService : IPatientsService
         _patientsRepository = patientsRepository;
     }
 
-    public async Task<Guid> CreatePatient(Patient patient)
+    public async Task<Guid> CreatePatient(Patient patient, Guid patientId)
     {
-        return await _patientsRepository.CreatePatient(patient);
+        return await _patientsRepository.CreatePatient(patient, patientId);
     }
 
     public async Task<Patient?> GetPatientById(Guid patientId)

@@ -47,10 +47,10 @@ public static class PatientSqlCommand
         return new PreparedRequest(GetPatientsByCriteria, dynamicParams);
     }
 
-    public static PreparedRequest CreatePatientRequest(Patient patient)
+    public static PreparedRequest CreatePatientRequest(Patient patient, Guid patientId)
     {
         var dynamicParams = new DynamicParameters();
-
+        //TODO finish patient creation
         dynamicParams.Add("firstName", patient.FirstName, DbType.StringFixedLength);
         dynamicParams.Add("lastName", patient.LastName, DbType.StringFixedLength);
         dynamicParams.Add("contactNumber", patient.ContactNumber, DbType.StringFixedLength);

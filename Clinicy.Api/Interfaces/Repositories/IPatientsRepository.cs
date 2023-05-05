@@ -5,7 +5,7 @@ namespace Clinicy.WebApi.Interfaces.Repositories;
 
 public interface IPatientsRepository
 {
-    public Task<Guid> CreatePatient(Patient patient);
+    public Task<Guid> CreatePatient(Patient patient, Guid patientId);
 
     public Task<Patient?> GetPatientById(Guid patientId);
 

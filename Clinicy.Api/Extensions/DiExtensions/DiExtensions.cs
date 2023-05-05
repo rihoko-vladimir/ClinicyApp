@@ -1,4 +1,6 @@
 using Clinicy.WebApi.Common.MappingProfiles;
+using Clinicy.WebApi.Consumers;
+using Clinicy.WebApi.Extensions.ConfigurationExtensions;
 using Clinicy.WebApi.Extensions.JWTExtensions;
 using Clinicy.WebApi.Factories;
 using Clinicy.WebApi.Interfaces.Factories;
@@ -6,7 +8,10 @@ using Clinicy.WebApi.Interfaces.Repositories;
 using Clinicy.WebApi.Interfaces.Services;
 using Clinicy.WebApi.Repositories;
 using Clinicy.WebApi.Services;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Shared.Models.Models.Configurations;
+using massExt = Clinicy.WebApi.Extensions.ConfigurationExtensions.ConfigurationExtensions;
 
 namespace Clinicy.WebApi.Extensions.DiExtensions;
 
@@ -21,6 +26,8 @@ public static class DiExtensions
         serviceCollection.AddScoped<IDoctorsService, DoctorsService>();
         serviceCollection.AddScoped<IPatientsService, PatientsService>();
         serviceCollection.AddScoped<ITicketsService, TicketsService>();
+        serviceCollection.AddScoped<IAccessTokenService, AccessTokenService>();
+        serviceCollection.AddSingleton(configuration.GetJwtConfiguration());
         serviceCollection.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 
         serviceCollection.AddAuthentication(options =>
@@ -33,5 +40,19 @@ public static class DiExtensions
         serviceCollection.AddAutoMapper(expression => expression.AddProfile<AutoMapperProfile>());
 
         return serviceCollection;
+    }
+    
+    private static void AddConfiguredMassTransit(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddMassTransit(configurator =>
+        {
+            configurator.AddConsumer<RegisterNewPatientConsumer>();
+            
+            configurator.UsingRabbitMq((context, factoryConfigurator) =>
+            {
+                var rabbitConfig = configuration.GetRabbitMqConfiguration();
+                massExt.ConfigureRabbitMq(context, factoryConfigurator, rabbitConfig);
+            });
+        });
     }
 }

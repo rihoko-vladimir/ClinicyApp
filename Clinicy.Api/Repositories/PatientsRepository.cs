@@ -17,13 +17,13 @@ public class PatientsRepository : IPatientsRepository
         _dbConnectionFactory = dbConnectionFactory;
     }
 
-    public async Task<Guid> CreatePatient(Patient patient)
+    public async Task<Guid> CreatePatient(Patient patient, Guid patientId)
     {
         await using var dbConnection = _dbConnectionFactory.GetConnection();
 
         Log.Information("Creating new patient with id {Id}", patient.Id);
 
-        var request = PatientSqlCommand.CreatePatientRequest(patient);
+        var request = PatientSqlCommand.CreatePatientRequest(patient, patientId);
 
         await dbConnection.ExecuteAsync(request.Query, request.DynamicParameters, commandTimeout: 5000);
 

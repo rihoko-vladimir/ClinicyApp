@@ -7,5 +7,5 @@ public interface IPatientRepository
 {
     public Task<Guid> CreatePatientAsync(RegisterPatientRequest registerPatientRequest, string passwordHash);
 
-    public Task<PatientCredentials> GetPatientCredentialsAsync(string login);
+    public Task<PatientCredentials?> GetPatientCredentialsAsync(string login);
 }

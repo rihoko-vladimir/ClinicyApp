@@ -4,5 +4,5 @@ namespace Clinicy.Auth.Interfaces.Services;
 
 public interface ISenderService
 {
-    public Task SendRegistrationRequestAsync(RegisterPatientRequest patientRequest);
+    public Task SendRegistrationRequestAsync(RegisterPatientRequest patientRequest, Guid credentialId);
 }

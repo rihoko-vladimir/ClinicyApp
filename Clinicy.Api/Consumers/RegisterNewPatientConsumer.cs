@@ -22,7 +22,7 @@ public class RegisterNewPatientConsumer : IConsumer<RegisterNewPatientMessage>
     {
         var mappedPatient = _mapper.Map<Patient>(context.Message);
 
-        var guid = await _patientsService.CreatePatient(mappedPatient);
+        var guid = await _patientsService.CreatePatient(mappedPatient, context.Message.Id);
 
         Log.Information("Created new patient with id {Id}", guid);
     }

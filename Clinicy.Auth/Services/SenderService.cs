@@ -19,12 +19,15 @@ public class SenderService : ISenderService
         _mapper = mapper;
     }
 
-    public async Task SendRegistrationRequestAsync(RegisterPatientRequest patientRequest)
+    public async Task SendRegistrationRequestAsync(RegisterPatientRequest patientRequest, Guid credentialId)
     {
         Log.Information("Registering new user with email {Email}", patientRequest.Email);
 
-        await SendMessage(new Uri($"queue:{QueueNames.RegisterUser}"),
-            _mapper.Map<RegisterNewPatientMessage>(patientRequest));
+        var mapped = _mapper.Map<RegisterNewPatientMessage>(patientRequest);
+
+        mapped.Id = credentialId;
+
+        await SendMessage(new Uri($"queue:{QueueNames.RegisterUser}"), mapped);
     }
 
     private async Task SendMessage<T>(Uri endpointUri, T message)

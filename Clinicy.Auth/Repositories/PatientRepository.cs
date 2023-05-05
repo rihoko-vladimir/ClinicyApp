@@ -35,7 +35,7 @@ public class PatientRepository : IPatientRepository
         return guid;
     }
 
-    public async Task<PatientCredentials> GetPatientCredentialsAsync(string login)
+    public async Task<PatientCredentials?> GetPatientCredentialsAsync(string login)
     {
         await using var dbConnection = _dbConnectionFactory.GetConnection();
 
