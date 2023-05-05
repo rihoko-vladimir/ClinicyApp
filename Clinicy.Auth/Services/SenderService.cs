@@ -1,78 +1,33 @@
+using AutoMapper;
 using Clinicy.Auth.Interfaces.Services;
+using Clinicy.Auth.Models.Request;
 using MassTransit;
 using Serilog;
+using Shared.Models.Messages;
 using Shared.Models.QueueNames;
 
 namespace Clinicy.Auth.Services;
 
 public class SenderService : ISenderService
 {
+    private readonly IMapper _mapper;
     private readonly ISendEndpointProvider _sendEndpointProvider;
 
-    public SenderService(ISendEndpointProvider sendEndpointProvider)
+    public SenderService(ISendEndpointProvider sendEndpointProvider, IMapper mapper)
     {
         _sendEndpointProvider = sendEndpointProvider;
+        _mapper = mapper;
     }
 
-    public async Task<ValidationResultExtensions.Result> SendEmailCodeMessageAsync(string emailCode,
-        string emailAddress, string firstName)
+    public async Task SendRegistrationRequestAsync(RegisterPatientRequest patientRequest)
     {
-        Log.Information("Sending confirmation {EmailCode} to {Email} via message broker", emailCode, emailAddress);
+        Log.Information("Registering new user with email {Email}", patientRequest.Email);
 
-        var result = await SendMessage(new Uri($"queue:{QueueNames.EmailConfirmationQueue}"),
-            new SendEmailConfirmationCodeMessage
-            {
-                EmailCode = emailCode,
-                EmailAddress = emailAddress,
-                FirstName = firstName
-            });
-
-        return result;
+        await SendMessage(new Uri($"queue:{QueueNames.RegisterUser}"),
+            _mapper.Map<RegisterNewPatientMessage>(patientRequest));
     }
 
-
-    public async Task<ValidationResultExtensions.Result> SendResetPasswordMessageAsync(string resetToken,
-        string emailAddress, string firstName)
-    {
-        Log.Information("Sending reset token {Reset} to {Email} via message broker", resetToken, emailAddress);
-
-        var result = await SendMessage(new Uri($"queue:{QueueNames.PasswordResetQueue}"),
-            new SendEmailResetLinkMessage
-            {
-                ResetToken = resetToken,
-                EmailAddress = emailAddress,
-                FirstName = firstName
-            });
-
-        return result;
-    }
-
-    public async Task<ValidationResultExtensions.Result> SendRegistrationMessageAsync(Guid userId, string firstName,
-        string lastName,
-        string userName, bool isTermsAccepted)
-    {
-        Log.Information("Sending registered user info: {Id}, {FirstName}, {LastName}, {UserName} via message broker",
-            userId, firstName, lastName, userName);
-
-        var message = new RegisterUserMessage
-        {
-            FirstName = firstName,
-            LastName = lastName,
-            UserId = userId,
-            UserName = userName,
-            IsTermsAccepted = isTermsAccepted
-        };
-
-        await SendMessage(new Uri($"queue:{QueueNames.RegistrationTimeQueue}"),
-            message);
-
-        var result = await SendMessage(new Uri($"queue:{QueueNames.RegistrationQueue}"),
-            message);
-
-        return result;
-    }
-
-    private async Task<ValidationResultExtensions.Result> SendMessage<T>(Uri endpointUri, T message)
+    private async Task SendMessage<T>(Uri endpointUri, T message)
     {
         try
         {
@@ -82,16 +37,12 @@ public class SenderService : ISenderService
             Log.Information("Sending to {Uri}", endpointUri.ToString());
 
             await endpoint.Send(message!);
-
-            return ValidationResultExtensions.Result.Success();
         }
         catch (Exception e)
         {
             Log.Error(
                 "An error occured while attempting to send a message. Exception: {Type}, Message: {Message}",
                 e.GetType().FullName, e.Message);
-
-            return ValidationResultExtensions.Result.Error();
         }
     }
 }

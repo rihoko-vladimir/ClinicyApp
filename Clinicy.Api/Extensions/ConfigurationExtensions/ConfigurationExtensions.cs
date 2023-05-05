@@ -1,7 +1,9 @@
+using Clinicy.WebApi.Consumers;
 using MassTransit;
 using Shared.Models.Models.Configurations;
+using Shared.Models.QueueNames;
 
-namespace Clinicy.Auth.Extensions.ConfigurationExtensions;
+namespace Clinicy.WebApi.Extensions.ConfigurationExtensions;
 
 public static class ConfigurationExtensions
 {
@@ -35,5 +37,13 @@ public static class ConfigurationExtensions
             hostConfigurator.Username(rabbitConfig.UserName);
             hostConfigurator.Password(rabbitConfig.Password);
         });
+    }
+
+    private static void ConfigureEndpoints(
+        this IBusFactoryConfigurator factoryConfigurator,
+        IBusRegistrationContext context)
+    {
+        factoryConfigurator.ReceiveEndpoint(QueueNames.RegisterUser,
+            endpointConfigurator => { endpointConfigurator.ConfigureConsumer<RegisterNewPatientConsumer>(context); });
     }
 }
