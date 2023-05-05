@@ -1,9 +1,9 @@
 using Clinicy.WebApi.Models;
 using Clinicy.WebApi.Models.Entities;
 
-namespace Clinicy.WebApi.Interfaces.Repositories;
+namespace Clinicy.WebApi.Interfaces.Services;
 
-public interface IPatientsRepository
+public interface IPatientsService
 {
     public Task<Guid> CreatePatient(Patient patient);
 

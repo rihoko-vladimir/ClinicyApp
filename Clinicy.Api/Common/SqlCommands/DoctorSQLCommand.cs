@@ -1,7 +1,8 @@
 using System.Data;
+using Clinicy.WebApi.Models.Constants;
 using Dapper;
 
-namespace Clinicy.WebApi.Models.Constants.SqlCommands;
+namespace Clinicy.WebApi.Common.SqlCommands;
 
 public static class DoctorSqlCommand
 {
@@ -27,8 +28,8 @@ public static class DoctorSqlCommand
         return new PreparedRequest(GetDoctorById, dynamicParams);
     }
 
-    public static PreparedRequest GetDoctorsByCriteriaRequest(string firstName, string lastName, string parentsName,
-        string qualification)
+    public static PreparedRequest GetDoctorsByCriteriaRequest(string firstName, string? lastName, string? parentsName,
+        string? qualification)
     {
         var dynamicParams = new DynamicParameters();
 

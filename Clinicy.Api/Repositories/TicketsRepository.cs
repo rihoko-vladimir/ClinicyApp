@@ -1,23 +1,64 @@
+using Clinicy.WebApi.Common.SqlCommands;
+using Clinicy.WebApi.Interfaces.Factories;
 using Clinicy.WebApi.Interfaces.Repositories;
-using Clinicy.WebApi.Models;
 using Clinicy.WebApi.Models.Entities;
+using Dapper;
+using Serilog;
 
 namespace Clinicy.WebApi.Repositories;
 
 public class TicketsRepository : ITicketsRepository
 {
-    public Task<Ticket> GetTicketById(Guid ticketId)
+    private readonly IDbConnectionFactory _dbConnectionFactory;
+
+    public TicketsRepository(IDbConnectionFactory dbConnectionFactory)
     {
-        throw new NotImplementedException();
+        _dbConnectionFactory = dbConnectionFactory;
     }
 
-    public Task<Ticket> CreateNewTicket(Guid patientId, Guid cabinetId, DateTime requestedDateTime)
+    public async Task<Ticket?> GetTicketById(Guid ticketId)
     {
-        throw new NotImplementedException();
+        await using var dbConnection = _dbConnectionFactory.GetConnection();
+
+        Log.Information("Querying for ticket with id {Id}", ticketId);
+
+        var request = TicketSqlCommand.GetTicketByIdRequest(ticketId);
+
+        var ticket =
+            await dbConnection.QueryFirstOrDefaultAsync<Ticket>(request.Query, request.DynamicParameters,
+                commandTimeout: 5000);
+
+        if (ticket is not null)
+            return ticket;
+
+        Log.Warning("Ticket wasn't found");
+
+        return null;
     }
 
-    public Task RevokeTicket(Guid ticketId)
+    public async Task<Guid> CreateNewTicket(Guid patientId, Guid cabinetId, DateTime requestedDateTime)
     {
-        throw new NotImplementedException();
+        await using var dbConnection = _dbConnectionFactory.GetConnection();
+
+        Log.Information("Creating new ticket for user {UserId}, Cabinet {CabinetId}, At time {RequestedDateTime}",
+            patientId, cabinetId, requestedDateTime);
+
+        var request = TicketSqlCommand.CreateTicketRequest(patientId, cabinetId, requestedDateTime);
+
+        var guid = await dbConnection.QueryFirstOrDefaultAsync<Guid>(request.Query, request.DynamicParameters,
+            commandTimeout: 5000);
+
+        return guid;
+    }
+
+    public async Task RevokeTicket(Guid ticketId)
+    {
+        await using var dbConnection = _dbConnectionFactory.GetConnection();
+
+        Log.Information("Revoking ticket {Id}", ticketId);
+
+        var request = TicketSqlCommand.RevokeTicketRequest(ticketId);
+
+        await dbConnection.ExecuteAsync(request.Query, request.DynamicParameters, commandTimeout: 5000);
     }
 }

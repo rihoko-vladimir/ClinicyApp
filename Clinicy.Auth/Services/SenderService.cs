@@ -1,5 +1,6 @@
 using Clinicy.Auth.Interfaces.Services;
 using MassTransit;
+using Serilog;
 using Shared.Models.QueueNames;
 
 namespace Clinicy.Auth.Services;
@@ -13,7 +14,8 @@ public class SenderService : ISenderService
         _sendEndpointProvider = sendEndpointProvider;
     }
 
-    public async Task<Result> SendEmailCodeMessageAsync(string emailCode, string emailAddress, string firstName)
+    public async Task<ValidationResultExtensions.Result> SendEmailCodeMessageAsync(string emailCode,
+        string emailAddress, string firstName)
     {
         Log.Information("Sending confirmation {EmailCode} to {Email} via message broker", emailCode, emailAddress);
 
@@ -29,7 +31,8 @@ public class SenderService : ISenderService
     }
 
 
-    public async Task<Result> SendResetPasswordMessageAsync(string resetToken, string emailAddress, string firstName)
+    public async Task<ValidationResultExtensions.Result> SendResetPasswordMessageAsync(string resetToken,
+        string emailAddress, string firstName)
     {
         Log.Information("Sending reset token {Reset} to {Email} via message broker", resetToken, emailAddress);
 
@@ -44,7 +47,8 @@ public class SenderService : ISenderService
         return result;
     }
 
-    public async Task<Result> SendRegistrationMessageAsync(Guid userId, string firstName, string lastName,
+    public async Task<ValidationResultExtensions.Result> SendRegistrationMessageAsync(Guid userId, string firstName,
+        string lastName,
         string userName, bool isTermsAccepted)
     {
         Log.Information("Sending registered user info: {Id}, {FirstName}, {LastName}, {UserName} via message broker",
@@ -68,7 +72,7 @@ public class SenderService : ISenderService
         return result;
     }
 
-    private async Task<Result> SendMessage<T>(Uri endpointUri, T message)
+    private async Task<ValidationResultExtensions.Result> SendMessage<T>(Uri endpointUri, T message)
     {
         try
         {
@@ -79,7 +83,7 @@ public class SenderService : ISenderService
 
             await endpoint.Send(message!);
 
-            return Result.Success();
+            return ValidationResultExtensions.Result.Success();
         }
         catch (Exception e)
         {
@@ -87,7 +91,7 @@ public class SenderService : ISenderService
                 "An error occured while attempting to send a message. Exception: {Type}, Message: {Message}",
                 e.GetType().FullName, e.Message);
 
-            return Result.Error();
+            return ValidationResultExtensions.Result.Error();
         }
     }
 }

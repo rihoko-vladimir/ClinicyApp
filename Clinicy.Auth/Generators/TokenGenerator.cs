@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Clinicy.Auth.Interfaces.Generators;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Clinicy.Auth.Generators;

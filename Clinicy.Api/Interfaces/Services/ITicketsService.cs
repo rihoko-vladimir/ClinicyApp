@@ -1,8 +1,8 @@
 using Clinicy.WebApi.Models.Entities;
 
-namespace Clinicy.WebApi.Interfaces.Repositories;
+namespace Clinicy.WebApi.Interfaces.Services;
 
-public interface ITicketsRepository
+public interface ITicketsService
 {
     public Task<Ticket?> GetTicketById(Guid ticketId);
 

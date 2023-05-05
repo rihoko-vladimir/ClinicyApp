@@ -1,8 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Clinicy.Auth.Interfaces.Generators;
 using Clinicy.Auth.Interfaces.Services;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using Shared.Models.Models.Configurations;
 using ClaimTypes = Shared.Models.Constants.ClaimTypes;
 

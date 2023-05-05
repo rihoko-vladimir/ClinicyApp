@@ -9,25 +9,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper" Version="12.0.1" />
-        <PackageReference Include="Dapper" Version="2.0.123" />
-        <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.15" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.3" />
-        <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
-        <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+        <PackageReference Include="AutoMapper" Version="12.0.1"/>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1"/>
+        <PackageReference Include="Dapper" Version="2.0.123"/>
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.15"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.3"/>
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="6.1.0"/>
+        <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
     <ItemGroup>
         <Content Include="..\.dockerignore">
             <Link>.dockerignore</Link>
         </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Interfaces\Services\" />
-        <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>
