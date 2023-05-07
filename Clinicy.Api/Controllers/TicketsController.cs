@@ -10,8 +10,8 @@ namespace Clinicy.WebApi.Controllers;
 [Route("/api/tickets")]
 public class TicketsController : ControllerBase
 {
-    private readonly IMapper _mapper;
     private readonly IAccessTokenService _accessTokenService;
+    private readonly IMapper _mapper;
     private readonly ITicketsService _ticketsService;
 
     public TicketsController(ITicketsService ticketsService, IMapper mapper, IAccessTokenService accessTokenService)
@@ -28,11 +28,8 @@ public class TicketsController : ControllerBase
         var token = await this.GetAccessTokenAsync();
         var success = _accessTokenService.GetGuidFromAccessToken(token, out _);
 
-        if (!success)
-        {
-            return BadRequest();
-        }
-        
+        if (!success) return Unauthorized();
+
         var ticket = await _ticketsService.GetTicketById(Guid.Parse(ticketId));
 
         return Ok(_mapper.Map<TicketResponse>(ticket));
@@ -40,18 +37,15 @@ public class TicketsController : ControllerBase
 
     [HttpPost]
     [Route("schedule")]
-    public async Task<IActionResult> ScheduleTicket([FromQuery] Guid patientId, [FromQuery] Guid cabinetId,
+    public async Task<IActionResult> ScheduleTicket([FromQuery] string cabinetNumber,
         DateTime requestedDateTime)
     {
         var token = await this.GetAccessTokenAsync();
-        var success = _accessTokenService.GetGuidFromAccessToken(token, out _);
+        var success = _accessTokenService.GetGuidFromAccessToken(token, out var patientId);
 
-        if (!success)
-        {
-            return BadRequest();
-        }
-        
-        var id = await _ticketsService.CreateNewTicket(patientId, cabinetId, requestedDateTime);
+        if (!success) return Unauthorized();
+
+        var id = await _ticketsService.CreateNewTicket(patientId, cabinetNumber, requestedDateTime);
 
         return Ok(id);
     }
@@ -63,11 +57,8 @@ public class TicketsController : ControllerBase
         var token = await this.GetAccessTokenAsync();
         var success = _accessTokenService.GetGuidFromAccessToken(token, out _);
 
-        if (!success)
-        {
-            return BadRequest();
-        }
-        
+        if (!success) return Unauthorized();
+
         await _ticketsService.RevokeTicket(Guid.Parse(ticketId));
 
         return Ok();

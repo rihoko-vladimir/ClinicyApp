@@ -1,8 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using Clinicy.WebApi.Interfaces.Services;
 using Serilog;
+using Shared.Models.Constants;
 using Shared.Models.Models.Configurations;
-using ClaimTypes = Shared.Models.Constants.ClaimTypes;
 
 namespace Clinicy.WebApi.Services;
 

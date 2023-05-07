@@ -2,5 +2,5 @@ namespace Shared.Models.QueueNames;
 
 public static class QueueNames
 {
-    public const string RegisterUser = "Register new user";
+    public const string RegisterUser = "RegisterNewUser";
 }

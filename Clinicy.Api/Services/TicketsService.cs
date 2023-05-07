@@ -18,9 +18,9 @@ public class TicketsService : ITicketsService
         return await _ticketsRepository.GetTicketById(ticketId);
     }
 
-    public async Task<Guid> CreateNewTicket(Guid patientId, Guid cabinetId, DateTime requestedDateTime)
+    public async Task<Guid> CreateNewTicket(Guid patientId, string cabinetNumber, DateTime requestedDateTime)
     {
-        return await _ticketsRepository.CreateNewTicket(patientId, cabinetId, requestedDateTime);
+        return await _ticketsRepository.CreateNewTicket(patientId, cabinetNumber, requestedDateTime);
     }
 
     public async Task RevokeTicket(Guid ticketId)

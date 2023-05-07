@@ -3,7 +3,8 @@ namespace Clinicy.WebApi.Models;
 public enum GenderEnum
 {
     Male = 'M',
-    Female = 'F'
+    Female = 'F',
+    Unknown = 'U'
 }
 
 public static class GenderExtensions
@@ -14,7 +15,7 @@ public static class GenderExtensions
         {
             'M' => GenderEnum.Male,
             'F' => GenderEnum.Female,
-            _ => GenderEnum.Male
+            _ => GenderEnum.Unknown
         };
     }
 }

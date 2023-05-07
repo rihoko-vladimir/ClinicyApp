@@ -11,9 +11,9 @@ namespace Clinicy.WebApi.Controllers;
 [Route("/api/patients")]
 public class PatientsController : ControllerBase
 {
+    private readonly IAccessTokenService _accessTokenService;
     private readonly IMapper _mapper;
     private readonly IPatientsService _patientsService;
-    private readonly IAccessTokenService _accessTokenService;
 
     public PatientsController(IMapper mapper, IPatientsService patientsService, IAccessTokenService accessTokenService)
     {
@@ -29,10 +29,7 @@ public class PatientsController : ControllerBase
         var token = await this.GetAccessTokenAsync();
         var success = _accessTokenService.GetGuidFromAccessToken(token, out _);
 
-        if (!success)
-        {
-            return BadRequest();
-        }
+        if (!success) return Unauthorized();
         var allPatients = await _patientsService.GetAllPatients();
 
         return Ok(_mapper.Map<IEnumerable<PatientResponse>>(allPatients));
@@ -45,11 +42,8 @@ public class PatientsController : ControllerBase
         var token = await this.GetAccessTokenAsync();
         var success = _accessTokenService.GetGuidFromAccessToken(token, out _);
 
-        if (!success)
-        {
-            return BadRequest();
-        }
-        
+        if (!success) return Unauthorized();
+
         var patient = await _patientsService.GetPatientById(Guid.Parse(patientId));
 
         return Ok(_mapper.Map<PatientResponse>(patient));
@@ -65,11 +59,8 @@ public class PatientsController : ControllerBase
         var token = await this.GetAccessTokenAsync();
         var success = _accessTokenService.GetGuidFromAccessToken(token, out _);
 
-        if (!success)
-        {
-            return BadRequest();
-        }
-        
+        if (!success) return Unauthorized();
+
         var patients = await _patientsService.FindPatientsByCriteria(firstName, lastName, passportNumber, email,
             GenderExtensions.ParseCharToGender(gender));
 

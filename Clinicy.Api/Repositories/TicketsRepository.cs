@@ -36,14 +36,14 @@ public class TicketsRepository : ITicketsRepository
         return null;
     }
 
-    public async Task<Guid> CreateNewTicket(Guid patientId, Guid cabinetId, DateTime requestedDateTime)
+    public async Task<Guid> CreateNewTicket(Guid patientId, string cabinetNumber, DateTime requestedDateTime)
     {
         await using var dbConnection = _dbConnectionFactory.GetConnection();
 
         Log.Information("Creating new ticket for user {UserId}, Cabinet {CabinetId}, At time {RequestedDateTime}",
-            patientId, cabinetId, requestedDateTime);
+            patientId, cabinetNumber, requestedDateTime);
 
-        var request = TicketSqlCommand.CreateTicketRequest(patientId, cabinetId, requestedDateTime);
+        var request = TicketSqlCommand.CreateTicketRequest(patientId, cabinetNumber, requestedDateTime);
 
         var guid = await dbConnection.QueryFirstOrDefaultAsync<Guid>(request.Query, request.DynamicParameters,
             commandTimeout: 5000);

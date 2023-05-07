@@ -26,7 +26,7 @@ public class AuthController : ControllerBase
         var result = await _patientService.LoginPatientAsync(loginRequest.Login, loginRequest.Password);
 
         if (result is null) return BadRequest();
-        
+
         this.SetAccessAndRefreshCookie(result.AccessToken, result.RefreshToken, _jwtConfiguration);
 
         return Ok();

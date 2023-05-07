@@ -2,6 +2,7 @@ using Clinicy.Auth.Interfaces.Repositories;
 using Clinicy.Auth.Interfaces.Services;
 using Clinicy.Auth.Models.Request;
 using Clinicy.Auth.Models.Responses;
+using Serilog;
 
 namespace Clinicy.Auth.Services;
 
@@ -39,11 +40,24 @@ public class PatientService : IPatientService
         var credential = await _patientRepository.GetPatientCredentialsAsync(login);
 
         if (credential is null)
+        {
+            Log.Warning("User with login {Login} wasn't found", login);
+
             return null;
+        }
 
         var isPasswordCorrect = BCrypt.Net.BCrypt.Verify(password, credential.PasswordHash);
 
-        if (!isPasswordCorrect) return null;
+        if (!isPasswordCorrect)
+        {
+            Log.Warning("Incorrect password provided for {Login}", login);
+
+            Log.Error("pass {P}", credential.PasswordHash);
+
+            Log.Error("pass1 {P}", password);
+
+            return null;
+        }
 
         var access = _accessTokenService.GetToken(credential.Id);
         var refresh = _refreshTokenService.GetToken(credential.Id);

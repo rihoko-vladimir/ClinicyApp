@@ -14,7 +14,7 @@ public static class PatientSqlCommand
     {
         var dynamicParams = new DynamicParameters();
 
-        dynamicParams.Add("email", patientCredentials.PasswordHash, DbType.StringFixedLength);
+        dynamicParams.Add("email", patientCredentials.Email, DbType.StringFixedLength);
         dynamicParams.Add("passwordHash", patientCredentials.PasswordHash, DbType.StringFixedLength);
         dynamicParams.Add("emailConfirmationCode", patientCredentials.EmailConfirmationCode, DbType.StringFixedLength);
 

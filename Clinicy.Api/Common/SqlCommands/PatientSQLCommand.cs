@@ -2,6 +2,7 @@ using System.Data;
 using Clinicy.WebApi.Models.Constants;
 using Clinicy.WebApi.Models.Entities;
 using Dapper;
+using Serilog;
 
 namespace Clinicy.WebApi.Common.SqlCommands;
 
@@ -49,8 +50,9 @@ public static class PatientSqlCommand
 
     public static PreparedRequest CreatePatientRequest(Patient patient, Guid patientId)
     {
+        Log.Error("gender {G}", patient.GenderEnum.ToString());
         var dynamicParams = new DynamicParameters();
-        //TODO finish patient creation
+        dynamicParams.Add("patientId", patientId, DbType.Guid);
         dynamicParams.Add("firstName", patient.FirstName, DbType.StringFixedLength);
         dynamicParams.Add("lastName", patient.LastName, DbType.StringFixedLength);
         dynamicParams.Add("contactNumber", patient.ContactNumber, DbType.StringFixedLength);

@@ -5,16 +5,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Clinicy.WebApi/Clinicy.WebApi.csproj", "Clinicy.WebApi/"]
-RUN dotnet restore "Clinicy.WebApi/Clinicy.WebApi.csproj"
+COPY ["Clinicy.Api/Clinicy.Api.csproj", "Clinicy.Api/"]
+RUN dotnet restore "Clinicy.Api/Clinicy.Api.csproj"
 COPY . .
-WORKDIR "/src/Clinicy.WebApi"
-RUN dotnet build "Clinicy.WebApi.csproj" -c Release -o /app/build
+WORKDIR "/src/Clinicy.Api"
+RUN dotnet build "Clinicy.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Clinicy.WebApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Clinicy.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Clinicy.WebApi.dll"]
+ENTRYPOINT ["dotnet", "Clinicy.Api.dll"]

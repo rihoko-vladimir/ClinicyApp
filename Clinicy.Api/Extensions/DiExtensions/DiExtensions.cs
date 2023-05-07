@@ -1,4 +1,5 @@
 using Clinicy.WebApi.Common.MappingProfiles;
+using Clinicy.WebApi.Common.SqlMappers;
 using Clinicy.WebApi.Consumers;
 using Clinicy.WebApi.Extensions.ConfigurationExtensions;
 using Clinicy.WebApi.Extensions.JWTExtensions;
@@ -8,9 +9,9 @@ using Clinicy.WebApi.Interfaces.Repositories;
 using Clinicy.WebApi.Interfaces.Services;
 using Clinicy.WebApi.Repositories;
 using Clinicy.WebApi.Services;
+using Dapper;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Shared.Models.Models.Configurations;
 using massExt = Clinicy.WebApi.Extensions.ConfigurationExtensions.ConfigurationExtensions;
 
 namespace Clinicy.WebApi.Extensions.DiExtensions;
@@ -29,6 +30,9 @@ public static class DiExtensions
         serviceCollection.AddScoped<IAccessTokenService, AccessTokenService>();
         serviceCollection.AddSingleton(configuration.GetJwtConfiguration());
         serviceCollection.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
+        serviceCollection.AddConfiguredMassTransit(configuration);
+
+        SqlMapper.AddTypeHandler(new TrimmedStringMapper());
 
         serviceCollection.AddAuthentication(options =>
         {
@@ -41,13 +45,13 @@ public static class DiExtensions
 
         return serviceCollection;
     }
-    
+
     private static void AddConfiguredMassTransit(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMassTransit(configurator =>
         {
             configurator.AddConsumer<RegisterNewPatientConsumer>();
-            
+
             configurator.UsingRabbitMq((context, factoryConfigurator) =>
             {
                 var rabbitConfig = configuration.GetRabbitMqConfiguration();
