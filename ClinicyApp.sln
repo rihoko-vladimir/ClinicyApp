@@ -1,10 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinicy.WebApi", "Clinicy.WebApi\Clinicy.WebApi.csproj", "{A0933A0B-F4C0-4F3E-A6E3-E2A24917455C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinicy.Api", "Clinicy.Api\Clinicy.Api.csproj", "{A0933A0B-F4C0-4F3E-A6E3-E2A24917455C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinicy.Auth", "Clinicy.Auth\Clinicy.Auth.csproj", "{8B591FD6-6FD9-4641-9E72-AF60AA0929C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinicy.ImportExport", "Clinicy.ImportExport\Clinicy.ImportExport.csproj", "{3056FCE0-1BDA-4006-82F0-0CF7676FE5A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Models", "Shared.Models\Shared.Models.csproj", "{3699145D-05D2-4CDC-9C2D-4FD78218FD26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +26,9 @@ Global
 		{3056FCE0-1BDA-4006-82F0-0CF7676FE5A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3056FCE0-1BDA-4006-82F0-0CF7676FE5A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3056FCE0-1BDA-4006-82F0-0CF7676FE5A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3699145D-05D2-4CDC-9C2D-4FD78218FD26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3699145D-05D2-4CDC-9C2D-4FD78218FD26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3699145D-05D2-4CDC-9C2D-4FD78218FD26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3699145D-05D2-4CDC-9C2D-4FD78218FD26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

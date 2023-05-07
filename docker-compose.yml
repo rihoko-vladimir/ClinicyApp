@@ -1,0 +1,77 @@
+version: "3.8"
+
+services:
+  clinicy-web-api:
+    build:
+      context: .
+      dockerfile: Clinicy.Api/Dockerfile
+    container_name: Clinicy-WebApi
+    ports:
+      - "8080:80"
+      - "8081:443"
+    depends_on:
+      - clinicy-rabbitmq
+      - clinicy-sql-server
+    networks:
+      - broker
+      - database
+  
+  clinicy-auth:
+    build:
+      context: .
+      dockerfile: Clinicy.Auth/Dockerfile
+    container_name: Clinicy-Auth
+    ports:
+      - "8090:80"
+      - "8091:443"
+    depends_on:
+      - clinicy-rabbitmq
+      - clinicy-sql-server
+    networks:
+      - broker
+      - database
+    
+  clinicy-import-export:
+    build:
+      context: .
+      dockerfile: Clinicy.ImportExport/Dockerfile
+    container_name: Clinicy-ImportExport
+    ports:
+      - "8070:80"
+      - "8071:443"
+    depends_on:
+      - clinicy-rabbitmq
+      - clinicy-sql-server
+    networks:
+      - broker
+      - database
+      
+  clinicy-rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: Clinicy-RabbitMQ
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
+    networks:
+      - broker
+        
+  clinicy-sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: Clinicy-Database
+    ports:
+      - "1435:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=testpassword12A
+    restart: always
+    networks:
+      - database
+    
+
+networks:
+  broker:
+    external: false
+    
+  database:
+    external: false
