@@ -4,6 +4,7 @@ using Clinicy.Auth.Interfaces.Repositories;
 using Clinicy.Auth.Models;
 using Clinicy.Auth.Models.Request;
 using Dapper;
+using Shared.Models.Constants;
 
 namespace Clinicy.Auth.Repositories;
 
@@ -20,11 +21,12 @@ public class PatientRepository : IPatientRepository
     {
         await using var dbConnection = _dbConnectionFactory.GetConnection();
 
-        var patientCredential = new PatientCredentials
+        var patientCredential = new AccountCredentials
         {
             Email = registerPatientRequest.Email,
             IsEmailConfirmed = true,
-            PasswordHash = passwordHash
+            PasswordHash = passwordHash,
+            AccountRole = RoleTypes.Patient
         };
 
         var request = PatientSqlCommand.CreateNewUserCredentialRequest(patientCredential);
@@ -35,13 +37,25 @@ public class PatientRepository : IPatientRepository
         return guid;
     }
 
-    public async Task<PatientCredentials?> GetPatientCredentialsAsync(string login)
+    public async Task<AccountCredentials?> GetPatientCredentialsAsync(string login)
     {
         await using var dbConnection = _dbConnectionFactory.GetConnection();
 
         var request = PatientSqlCommand.GetPatientCredentialRequest(login);
 
-        var cred = await dbConnection.QueryFirstOrDefaultAsync<PatientCredentials>(request.Query,
+        var cred = await dbConnection.QueryFirstOrDefaultAsync<AccountCredentials>(request.Query,
+            request.DynamicParameters, commandTimeout: 5000);
+
+        return cred;
+    }
+
+    public async Task<AccountCredentials?> GetPatientCredentialsByGuidAsync(Guid guid)
+    {
+        await using var dbConnection = _dbConnectionFactory.GetConnection();
+
+        var request = PatientSqlCommand.GetPatientCredentialByGuidRequest(guid);
+
+        var cred = await dbConnection.QueryFirstOrDefaultAsync<AccountCredentials>(request.Query,
             request.DynamicParameters, commandTimeout: 5000);
 
         return cred;

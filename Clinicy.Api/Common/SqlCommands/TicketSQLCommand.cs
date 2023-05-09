@@ -25,7 +25,7 @@ public class TicketSqlCommand
 
         dynamicParams.Add("patientId", patientId, DbType.Guid);
         dynamicParams.Add("cabinetNumber", cabinetNumber, DbType.StringFixedLength);
-        dynamicParams.Add("parentsName", requestedDateTime, DbType.DateTime2);
+        dynamicParams.Add("requestDateTime", requestedDateTime, DbType.DateTime2);
 
         return new PreparedRequest(CreateTicket, dynamicParams);
     }

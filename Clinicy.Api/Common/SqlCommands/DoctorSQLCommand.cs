@@ -34,9 +34,9 @@ public static class DoctorSqlCommand
         var dynamicParams = new DynamicParameters();
 
         dynamicParams.Add("firstName", firstName, DbType.StringFixedLength);
-        dynamicParams.Add("lastName", lastName, DbType.StringFixedLength);
-        dynamicParams.Add("parentsName", parentsName, DbType.StringFixedLength);
-        dynamicParams.Add("qualification", qualification, DbType.StringFixedLength);
+        dynamicParams.Add("lastName", lastName ?? "null", DbType.StringFixedLength);
+        dynamicParams.Add("parentsName", parentsName ?? "null", DbType.StringFixedLength);
+        dynamicParams.Add("qualification", qualification ?? "null", DbType.StringFixedLength);
 
         return new PreparedRequest(GetDoctorByCriteria, dynamicParams);
     }

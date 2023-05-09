@@ -48,18 +48,29 @@ public class PatientService : IPatientService
 
         var isPasswordCorrect = BCrypt.Net.BCrypt.Verify(password, credential.PasswordHash);
 
-        if (!isPasswordCorrect)
+        if (isPasswordCorrect) return await RefreshTokensAsync(credential.Id);
+
+        Log.Warning("Incorrect password provided for {Login}", login);
+
+        Log.Error("pass {P}", credential.PasswordHash);
+
+        Log.Error("pass1 {P}", password);
+
+        return null;
+    }
+
+    public async Task<TokensResponse?> RefreshTokensAsync(Guid userId)
+    {
+        var credential = await _patientRepository.GetPatientCredentialsByGuidAsync(userId);
+
+        if (credential is null)
         {
-            Log.Warning("Incorrect password provided for {Login}", login);
-
-            Log.Error("pass {P}", credential.PasswordHash);
-
-            Log.Error("pass1 {P}", password);
+            Log.Warning("User with id {UserId} wasn't found", userId);
 
             return null;
         }
 
-        var access = _accessTokenService.GetToken(credential.Id);
+        var access = _accessTokenService.GetToken(credential.Id, credential.AccountRole);
         var refresh = _refreshTokenService.GetToken(credential.Id);
 
         return new TokensResponse(access, refresh);
