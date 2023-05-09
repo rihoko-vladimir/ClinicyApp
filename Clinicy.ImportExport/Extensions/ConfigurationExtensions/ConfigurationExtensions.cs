@@ -1,21 +1,13 @@
-using Clinicy.WebApi.Consumers;
+using Clinicy.ImportExport.Consumers;
 using MassTransit;
 using Shared.Models.Models.Configurations;
 using Shared.Models.QueueNames;
 
-namespace Clinicy.WebApi.Extensions.ConfigurationExtensions;
+namespace Clinicy.ImportExport.Extensions.ConfigurationExtensions;
 
 public static class ConfigurationExtensions
 {
     //Код тут сделан чисто для удобства получения конфигурационных файлов + для автоконфигурации message broker'a
-    public static JwtConfiguration GetJwtConfiguration(this IConfiguration configuration)
-    {
-        var section = configuration.GetSection(JwtConfiguration.Key);
-        var jwtConfiguration = new JwtConfiguration();
-        section.Bind(jwtConfiguration);
-
-        return jwtConfiguration;
-    }
 
     public static RabbitMqConfiguration GetRabbitMqConfiguration(this IConfiguration configuration)
     {
@@ -44,7 +36,7 @@ public static class ConfigurationExtensions
         this IBusFactoryConfigurator factoryConfigurator,
         IBusRegistrationContext context)
     {
-        factoryConfigurator.ReceiveEndpoint(QueueNames.RegisterUser,
-            endpointConfigurator => { endpointConfigurator.ConfigureConsumer<RegisterNewPatientConsumer>(context); });
+        factoryConfigurator.ReceiveEndpoint(QueueNames.Export,
+            endpointConfigurator => { endpointConfigurator.ConfigureConsumer<ExportConsumer>(context); });
     }
 }

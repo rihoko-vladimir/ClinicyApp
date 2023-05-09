@@ -6,6 +6,7 @@ using Shared.Models.Messages;
 
 namespace Clinicy.WebApi.Common.MappingProfiles;
 
+//Автомаппер маппит типы из одного в другие. Полезно для скрытия полей или простого преобразований типов
 public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()

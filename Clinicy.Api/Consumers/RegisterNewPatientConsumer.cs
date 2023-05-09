@@ -7,6 +7,7 @@ using Shared.Models.Messages;
 
 namespace Clinicy.WebApi.Consumers;
 
+//Данный класс получает сообщения из брокера и выполняет некую логику
 public class RegisterNewPatientConsumer : IConsumer<RegisterNewPatientMessage>
 {
     private readonly IMapper _mapper;

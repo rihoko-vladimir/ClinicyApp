@@ -51,7 +51,7 @@ public class AuthController : ControllerBase
     public async Task<ActionResult> Refresh()
     {
         var refreshToken = this.GetRefreshTokenFromCookie();
-        var accessSuccess = _accessTokenService.GetGuidFromAccessToken(refreshToken, out var userId);
+        var accessSuccess = _accessTokenService.GetGuidFromAccessToken(refreshToken, out _);
         var refreshSuccess = _refreshTokenService.GetGuidFromRefreshToken(refreshToken, out var refreshUserId);
 
         if (!accessSuccess && !refreshSuccess) return BadRequest();

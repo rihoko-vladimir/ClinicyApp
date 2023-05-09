@@ -21,20 +21,26 @@ public class DoctorsController : ControllerBase
         _accessTokenService = accessTokenService;
     }
 
+    //Получить всех докторов, запрос пойдёт сюда
     [HttpGet]
     [Route("all")]
     public async Task<IActionResult> GetAllDoctors()
     {
+        //Получает JWT токен из куки. Если они там есть и корректны、то будет true и запрос успешно выполнится.
+        //Код повторяется в остальных контроллерах, делает то же самое
         var token = await this.GetAccessTokenAsync();
         var success = _accessTokenService.GetGuidFromAccessToken(token, out _);
 
 
         if (!success) return Unauthorized();
+
+        //Получает всех докторов
         var allDoctors = await _doctorsService.GetAllDoctors();
 
         return Ok(_mapper.Map<IEnumerable<DoctorResponse>>(allDoctors));
     }
 
+    //Найти доктора по айдишнику
     [HttpGet]
     [Route("findById")]
     public async Task<IActionResult> GetDoctorById([FromQuery] string doctorId)
@@ -48,6 +54,7 @@ public class DoctorsController : ControllerBase
         return Ok(_mapper.Map<DoctorResponse>(doctor));
     }
 
+    //Найти доктора по критериям
     [HttpGet]
     [Route("findByCriteria")]
     public async Task<IActionResult> GetDoctorsByCriteria([FromQuery] string? firstName, [FromQuery] string? lastName,

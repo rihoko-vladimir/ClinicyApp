@@ -9,6 +9,7 @@ Log.Logger = logger;
 Log.Information("Application is starting up...");
 
 // Add services to the container.
+//Здесь регистриуются различные сервисы для работы приложения
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

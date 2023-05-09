@@ -1,7 +1,7 @@
-create database ClinicDb;
+create database ClinicDB;
 go
 
-use ClinicDb;
+use ClinicDB;
 go
 
 create table ContactInformation
@@ -221,24 +221,28 @@ create table CuresLink
     diagnosesId uniqueidentifier references Diagnoses (id),
     curesId     uniqueidentifier references Cures (id)
 )
+    go
 
 create table Analyses
 (
     id          uniqueidentifier primary key,
     description nvarchar(1000)
 )
+    go
 
 create table AnalysesLink
 (
     diagnosesId uniqueidentifier references Diagnoses (id),
     analysesId  uniqueidentifier references Analyses (id)
 )
+    go
 
 create table Diagnoses
 (
     id          uniqueidentifier primary key,
     description nvarchar(1000)
 )
+    go
 
 create table Appointments
 (
@@ -249,6 +253,7 @@ create table Appointments
     cabinetId   uniqueidentifier references Cabinets (id),
     date        date
 )
+    go
 
 -- Заполнение случайными данными
 
@@ -329,7 +334,25 @@ VALUES ('219f6fff-b10d-46af-af5e-56bdd4e75211', 'Ivan', 'Petrov', 'Sergeyevich',
     ('848122f2-f215-41bf-90ac-cbe3c080d8f8', 'Alexey', 'Novikov', 'Vladimirovich',
     'CB934273-F10D-4186-ADD5-3D32C498BFC1',
     '5B513FA4-572A-408F-8B86-12A60EB53FBD', 'https://example.com/alexey.jpg');
+go
+create procedure BackupEverything
+    as
+begin
+    BACKUP DATABASE ClinicDb
+        TO DISK = '/var/opt/backups'
+        WITH NOFORMAT, NOINIT, SKIP, NOREWIND, NOUNLOAD,
+        MEDIANAME = 'ClinicDb',
+        NAME = 'Full Backup of ClinicDb';
 
+    BACKUP DATABASE AuthDb
+        TO DISK = '/var/opt/backups'
+        WITH NOFORMAT, NOINIT, SKIP, NOREWIND, NOUNLOAD,
+        MEDIANAME = 'AuthDb',
+        NAME = 'Full Backup of AuthDb';
+end
+go
+
+exec BackupEverything
 create database AuthDb;
 go;
 
@@ -353,6 +376,7 @@ create table Tokens
     patientCredentialId uniqueidentifier references AccountCredentials (id),
     issueDateTime       DATETIME2
 )
+    go
 
 create procedure GetPatientCredential @login nvarchar(100)
 as
@@ -385,4 +409,12 @@ begin
 select @generatedId
 end
 go
+
+
+
+
+
+
+
+
 
