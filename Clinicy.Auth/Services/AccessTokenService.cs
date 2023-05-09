@@ -19,11 +19,12 @@ public class AccessTokenService : IAccessTokenService
         _jwtConfiguration = configuration;
     }
 
-    public string GetToken(Guid id)
+    public string GetToken(Guid id, string role)
     {
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Id, id.ToString())
+            new(ClaimTypes.Id, id.ToString()),
+            new(ClaimTypes.Role, role)
         };
 
         var token = _tokenGenerator.GenerateToken(_jwtConfiguration.AccessSecret,

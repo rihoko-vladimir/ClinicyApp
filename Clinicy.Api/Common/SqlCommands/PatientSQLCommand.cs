@@ -40,10 +40,10 @@ public static class PatientSqlCommand
         var dynamicParams = new DynamicParameters();
 
         dynamicParams.Add("firstName", firstName, DbType.StringFixedLength);
-        dynamicParams.Add("lastName", lastName, DbType.StringFixedLength);
-        dynamicParams.Add("passportNumber", passportNumber, DbType.StringFixedLength);
-        dynamicParams.Add("email", email, DbType.StringFixedLength);
-        dynamicParams.Add("gender", gender, DbType.StringFixedLength);
+        dynamicParams.Add("lastName", lastName ?? "null", DbType.StringFixedLength);
+        dynamicParams.Add("passportNumber", passportNumber ?? "null", DbType.StringFixedLength);
+        dynamicParams.Add("email", email ?? "null", DbType.StringFixedLength);
+        dynamicParams.Add("gender", gender ?? "null", DbType.StringFixedLength);
 
         return new PreparedRequest(GetPatientsByCriteria, dynamicParams);
     }

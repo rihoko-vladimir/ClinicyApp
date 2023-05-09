@@ -8,4 +8,6 @@ public interface IPatientService
     public Task CreatePatientAsync(RegisterPatientRequest registerPatientRequest);
 
     public Task<TokensResponse?> LoginPatientAsync(string login, string password);
+
+    public Task<TokensResponse?> RefreshTokensAsync(Guid userId);
 }

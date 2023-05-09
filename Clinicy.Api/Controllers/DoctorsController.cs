@@ -57,8 +57,9 @@ public class DoctorsController : ControllerBase
         var success = _accessTokenService.GetGuidFromAccessToken(token, out _);
 
         if (!success) return Unauthorized();
-        var doctors = await _doctorsService.FindDoctorsByCriteria(firstName, lastName, parentsName, qualification);
+        var doctors =
+            await _doctorsService.FindDoctorsByCriteria(firstName ?? "null", lastName, parentsName, qualification);
 
-        return Ok(_mapper.Map<IEnumerable<DoctorResponse>>(doctors));
+        return Ok(doctors);
     }
 }
