@@ -2,16 +2,11 @@ using System.IdentityModel.Tokens.Jwt;
 using Clinicy.WebApi.Interfaces.Services;
 using Serilog;
 using Shared.Models.Constants;
-using Shared.Models.Models.Configurations;
 
 namespace Clinicy.WebApi.Services;
 
 public class AccessTokenService : IAccessTokenService
 {
-    public AccessTokenService(JwtConfiguration configuration)
-    {
-    }
-
     public bool GetGuidFromAccessToken(string accessToken, out Guid userId)
     {
         try

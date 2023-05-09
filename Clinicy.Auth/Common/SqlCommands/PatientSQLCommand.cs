@@ -8,7 +8,7 @@ namespace Clinicy.Auth.Common.SqlCommands;
 public static class PatientSqlCommand
 {
     private const string GetPatientCredential = "exec GetPatientCredential @login";
-    private const string CreateNewPatient = "exec CreateNewPatient @email, @passwordHash, @emailConfirmationCode";
+    private const string CreateNewPatient = "exec CreateNewPatient @email, @passwordHash, @emailConfirmationCode, @role";
     private const string GetPatientCredentialByGuid = "exec GetPatientCredentialByGuid @guid";
 
     public static PreparedRequest CreateNewUserCredentialRequest(AccountCredentials accountCredentials)

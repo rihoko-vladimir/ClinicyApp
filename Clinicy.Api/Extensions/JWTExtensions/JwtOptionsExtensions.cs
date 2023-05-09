@@ -7,6 +7,7 @@ namespace Clinicy.WebApi.Extensions.JWTExtensions;
 
 public static class JwtOptionsExtensions
 {
+    //Автоконфигурация проверки jwt токенов
     public static void ConfigureJwtBearer(this JwtBearerOptions options, IConfiguration configuration)
     {
         var jwtOptions = configuration.GetJwtConfiguration();

@@ -61,6 +61,9 @@ services:
     container_name: Clinicy-Database
     ports:
       - "1435:1433"
+    volumes:
+      - "./backups:/var/opt/backups"
+    user: root
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=testpassword12A

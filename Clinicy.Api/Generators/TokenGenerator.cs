@@ -8,6 +8,7 @@ namespace Clinicy.WebApi.Generators;
 
 public class TokenGenerator : ITokenGenerator
 {
+    //Генерирует jwt токен
     public string GenerateToken(string secret, string issuer, string audience,
         int expiresInMinutes, ICollection<Claim>? claims = null)
     {

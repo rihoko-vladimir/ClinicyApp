@@ -21,6 +21,7 @@ public static class DiExtensions
     public static IServiceCollection AddApplication(this IServiceCollection serviceCollection,
         IConfiguration configuration)
     {
+        //Добавление сервисов в DI контейнер
         serviceCollection.AddScoped<IDoctorsRepository, DoctorsRepository>();
         serviceCollection.AddScoped<IPatientsRepository, PatientsRepository>();
         serviceCollection.AddScoped<ITicketsRepository, TicketsRepository>();
@@ -28,6 +29,7 @@ public static class DiExtensions
         serviceCollection.AddScoped<IPatientsService, PatientsService>();
         serviceCollection.AddScoped<ITicketsService, TicketsService>();
         serviceCollection.AddScoped<IAccessTokenService, AccessTokenService>();
+        serviceCollection.AddScoped<ISenderService, SenderService>();
         serviceCollection.AddSingleton(configuration.GetJwtConfiguration());
         serviceCollection.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
         serviceCollection.AddConfiguredMassTransit(configuration);
@@ -46,6 +48,7 @@ public static class DiExtensions
         return serviceCollection;
     }
 
+    //Метод доя настройки Message Broker'a
     private static void AddConfiguredMassTransit(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMassTransit(configurator =>

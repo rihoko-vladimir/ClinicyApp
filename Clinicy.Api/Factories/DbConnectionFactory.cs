@@ -14,6 +14,7 @@ public class DbConnectionFactory : IDbConnectionFactory
                             throw new InvalidOperationException();
     }
 
+    //Фабрика для получения подключений к базе данных
     public DbConnection GetConnection()
     {
         var connection = new SqlConnection(_connectionString);

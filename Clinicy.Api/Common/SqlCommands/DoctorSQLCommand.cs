@@ -6,6 +6,9 @@ namespace Clinicy.WebApi.Common.SqlCommands;
 
 public static class DoctorSqlCommand
 {
+    //Если вкратце、то тут создаются конкретно запросы на базу。По строчке расписывать кринж、тут просто приколы из даппера。
+    //Абсолютно такие же классы созданы для пациентов、тикетов и тд
+
     private const string GetAllDoctors = "exec GetAllDoctors";
     private const string GetDoctorById = "exec GetDoctorById @doctorId";
 

@@ -1,21 +1,15 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shared.Models.Models.Configurations;
 
 namespace Clinicy.Auth.Extensions.ControllerExtensions;
 
 public static class ControllerExtensions
 {
-    public static async Task<string> GetAccessTokenAsync(this ControllerBase controllerBase)
-    {
-        return (await controllerBase.HttpContext.GetTokenAsync("access_token"))!;
-    }
-
     public static void SetAccessAndRefreshCookie(this ControllerBase controllerBase, string accessToken,
         string refreshToken, JwtConfiguration configuration)
     {
-        var refreshCookieKey = "refresh";
-        var accessCookieKey = "access";
+        const string refreshCookieKey = "refresh";
+        const string accessCookieKey = "access";
         var accessCookieOptions = new CookieOptions
         {
             Secure = true,
