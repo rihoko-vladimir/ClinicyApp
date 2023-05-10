@@ -19,7 +19,7 @@ Start the project
   docker compose up --build
 ```
 
-When database was launched, you need to [fill it](https://github.com/rihoko-vladimir/ClinicyApp/blob/main/database-initialise.sql) with some data
+When database is gonna be launched, you will need to [fill it](https://github.com/rihoko-vladimir/ClinicyApp/blob/main/database-initialise.sql) with some data
 
 ## Tech Stack
 
