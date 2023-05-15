@@ -36,6 +36,8 @@ services:
       context: .
       dockerfile: Clinicy.ImportExport/Dockerfile
     container_name: Clinicy-ImportExport
+    volumes:
+      - "./backups:/app/backups"
     ports:
       - "8070:80"
       - "8071:443"
@@ -49,6 +51,7 @@ services:
   clinicy-rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: Clinicy-RabbitMQ
+    hostname: broker
     ports:
       - "5672:5672"
       - "15672:15672"
