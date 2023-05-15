@@ -24,15 +24,17 @@ public class ExportConsumer : IConsumer<ExportMessage>
             var allDoctors = await dbConnection.QueryAsync<Doctor>("exec GetAllDoctors");
             var allPatients = await dbConnection.QueryAsync<Patient>("exec GetAllPatients");
 
-            var patientsSerializer = new XmlSerializer(typeof(Patient));
-            var doctorsSerializer = new XmlSerializer(typeof(Doctor));
+            var patientsSerializer = new XmlSerializer(typeof(List<Patient>));
+            var doctorsSerializer = new XmlSerializer(typeof(List<Doctor>));
 
             await using var patientsFileStream =
-                new FileStream($"backups/patients-{DateTime.Now}.xml", FileMode.OpenOrCreate);
+                new FileStream($"backups/patients-{DateTime.Now:dd-MM-yyyy}.xml", FileMode.OpenOrCreate);
             await using var doctorsFileStream =
-                new FileStream($"backups/doctors-{DateTime.Now}.xml", FileMode.OpenOrCreate);
+                new FileStream($"backups/doctors-{DateTime.Now:dd-MM-yyyy}.xml", FileMode.OpenOrCreate);
+
+            Console.WriteLine(allPatients.ToList());
             
-            patientsSerializer.Serialize(patientsFileStream, allPatients);
-            doctorsSerializer.Serialize(doctorsFileStream, allDoctors);
+            patientsSerializer.Serialize(patientsFileStream, allPatients.ToList());
+            doctorsSerializer.Serialize(doctorsFileStream, allDoctors.ToList());
     }
 }

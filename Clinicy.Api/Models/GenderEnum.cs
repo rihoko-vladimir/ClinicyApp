@@ -4,7 +4,8 @@ public enum GenderEnum
 {
     Male = 'M',
     Female = 'F',
-    Unknown = 'U'
+    Unknown = 'U',
+    None = 0
 }
 
 public static class GenderExtensions

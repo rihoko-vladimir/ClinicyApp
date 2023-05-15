@@ -36,6 +36,8 @@ services:
       context: .
       dockerfile: Clinicy.ImportExport/Dockerfile
     container_name: Clinicy-ImportExport
+    volumes:
+      - "./backups:/app/backups"
     ports:
       - "8070:80"
       - "8071:443"
