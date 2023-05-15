@@ -1,3 +1,5 @@
+using System.Xml.Serialization;
+using Clinicy.WebApi.Models.Entities;
 using Dapper;
 using MassTransit;
 using Microsoft.Data.SqlClient;
@@ -19,6 +21,18 @@ public class ExportConsumer : IConsumer<ExportMessage>
         await using var dbConnection =
             new SqlConnection(_configuration.GetConnectionString("ClinicDbConnectionString"));
 
-        await dbConnection.ExecuteAsync("exec BackupEverything");
+            var allDoctors = await dbConnection.QueryAsync<Doctor>("exec GetAllDoctors");
+            var allPatients = await dbConnection.QueryAsync<Patient>("exec GetAllPatients");
+
+            var patientsSerializer = new XmlSerializer(typeof(Patient));
+            var doctorsSerializer = new XmlSerializer(typeof(Doctor));
+
+            await using var patientsFileStream =
+                new FileStream($"backups/patients-{DateTime.Now}.xml", FileMode.OpenOrCreate);
+            await using var doctorsFileStream =
+                new FileStream($"backups/doctors-{DateTime.Now}.xml", FileMode.OpenOrCreate);
+            
+            patientsSerializer.Serialize(patientsFileStream, allPatients);
+            doctorsSerializer.Serialize(doctorsFileStream, allDoctors);
     }
 }

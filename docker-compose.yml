@@ -49,6 +49,7 @@ services:
   clinicy-rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: Clinicy-RabbitMQ
+    hostname: broker
     ports:
       - "5672:5672"
       - "15672:15672"
