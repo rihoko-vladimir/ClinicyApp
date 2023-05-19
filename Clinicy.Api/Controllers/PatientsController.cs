@@ -1,13 +1,16 @@
 using AutoMapper;
+using Clinicy.WebApi.CustomFilters;
 using Clinicy.WebApi.Extensions.ControllerExtensions;
 using Clinicy.WebApi.Interfaces.Services;
 using Clinicy.WebApi.Models;
 using Clinicy.WebApi.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models.Constants;
 
 namespace Clinicy.WebApi.Controllers;
 
 [ApiController]
+[RoleCheck(RoleTypes.Doctor)]
 [Route("/api/patients")]
 public class PatientsController : ControllerBase
 {
