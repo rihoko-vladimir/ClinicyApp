@@ -33,4 +33,25 @@ public class AccessTokenService : IAccessTokenService
     {
         return "";
     }
+    
+    public bool GetRoleFromAccessToken(string accessToken, out string role)
+    {
+        try
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(accessToken);
+            var roleL = token.Claims.First(claim => claim.Type == ClaimTypes.Role).Value;
+            role = roleL;
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            Log.Warning("Invalid Access token provided. Exception: {Type}, Message: {Message}", e.GetType().FullName,
+                e.Message);
+            role = string.Empty;
+
+            return false;
+        }
+    }
 }

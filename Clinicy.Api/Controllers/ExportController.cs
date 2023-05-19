@@ -1,10 +1,13 @@
+using Clinicy.WebApi.CustomFilters;
 using Clinicy.WebApi.Extensions.ControllerExtensions;
 using Clinicy.WebApi.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models.Constants;
 
 namespace Clinicy.WebApi.Controllers;
 
 [ApiController]
+[RoleCheck(RoleTypes.Patient)]
 [Route("/api/export")]
 public class ExportController : ControllerBase
 {

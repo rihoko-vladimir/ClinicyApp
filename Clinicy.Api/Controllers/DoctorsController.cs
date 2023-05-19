@@ -1,12 +1,15 @@
 using AutoMapper;
+using Clinicy.WebApi.CustomFilters;
 using Clinicy.WebApi.Extensions.ControllerExtensions;
 using Clinicy.WebApi.Interfaces.Services;
 using Clinicy.WebApi.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models.Constants;
 
 namespace Clinicy.WebApi.Controllers;
 
 [ApiController]
+[RoleCheck(RoleTypes.Patient)]
 [Route("/api/doctors")]
 public class DoctorsController : ControllerBase
 {
@@ -68,5 +71,12 @@ public class DoctorsController : ControllerBase
             await _doctorsService.FindDoctorsByCriteria(firstName ?? "null", lastName, parentsName, qualification);
 
         return Ok(doctors);
+    }
+
+    private bool IsRoleEqualsDoctor(string accessToken)
+    {
+        _accessTokenService.GetRoleFromAccessToken(accessToken, out var role);
+
+        return role == RoleTypes.Doctor;
     }
 }
