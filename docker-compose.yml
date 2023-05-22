@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: Clinicy.Api/Dockerfile
     container_name: Clinicy-WebApi
+    image: rihoko/clinicyapp-clinicy-web-api:latest
     ports:
       - "8080:80"
       - "8081:443"
@@ -21,6 +22,7 @@ services:
       context: .
       dockerfile: Clinicy.Auth/Dockerfile
     container_name: Clinicy-Auth
+    image: rihoko/clinicyapp-clinicy-auth:latest
     ports:
       - "8090:80"
       - "8091:443"
@@ -36,6 +38,7 @@ services:
       context: .
       dockerfile: Clinicy.ImportExport/Dockerfile
     container_name: Clinicy-ImportExport
+    image: rihoko/clinicyapp-clinicy-import-export:latest
     volumes:
       - "./backups:/app/backups"
     ports:
