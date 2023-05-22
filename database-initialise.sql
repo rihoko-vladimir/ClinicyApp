@@ -216,13 +216,6 @@ create table Cures
     dose        nvarchar(100)
 )
 
-create table CuresLink
-(
-    diagnosesId uniqueidentifier references Diagnoses (id),
-    curesId     uniqueidentifier references Cures (id)
-)
-    go
-
 create table Analyses
 (
     id          uniqueidentifier primary key,
@@ -230,17 +223,24 @@ create table Analyses
 )
     go
 
-create table AnalysesLink
-(
-    diagnosesId uniqueidentifier references Diagnoses (id),
-    analysesId  uniqueidentifier references Analyses (id)
-)
-    go
-
 create table Diagnoses
 (
     id          uniqueidentifier primary key,
     description nvarchar(1000)
+)
+    go
+
+create table CuresLink
+(
+    diagnosesId uniqueidentifier references Diagnoses (id),
+    curesId     uniqueidentifier references Cures (id)
+)
+    go
+
+create table AnalysesLink
+(
+    diagnosesId uniqueidentifier references Diagnoses (id),
+    analysesId  uniqueidentifier references Analyses (id)
 )
     go
 
@@ -410,11 +410,65 @@ select @generatedId
 end
 go
 
+use ClinicDB
+go
+alter table Patients
+ALTER COLUMN passportNumber ADD MASKED WITH (FUNCTION = 'default()')
 
+alter table Patients
+ALTER COLUMN email ADD MASKED WITH (FUNCTION = 'email()')
 
+use AuthDb
+go
+alter table AccountCredentials
+ALTER COLUMN email ADD MASKED WITH (FUNCTION = 'email()')
+alter table AccountCredentials
+ALTER COLUMN passwordHash ADD MASKED WITH (FUNCTION = 'default()')
+go
 
+use master
+CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'superstrongpassword1A';
+GO
+CREATE CERTIFICATE MyServerCert WITH SUBJECT = 'My DEK Certificate';
+GO
+use AuthDb
+CREATE DATABASE ENCRYPTION KEY
+    WITH ALGORITHM = AES_256
+    ENCRYPTION BY SERVER CERTIFICATE MyServerCert;
+GO
+ALTER DATABASE AuthDb
+    SET ENCRYPTION ON;
+GO
 
+use ClinicDB
+CREATE DATABASE ENCRYPTION KEY
+    WITH ALGORITHM = AES_256
+    ENCRYPTION BY SERVER CERTIFICATE MyServerCert;
+GO
+ALTER DATABASE ClinicDB
+    SET ENCRYPTION ON;
+GO
 
-
-
-
+CREATE LOGIN auth WITH PASSWORD = 'authstrongpassword12!';
+go
+CREATE LOGIN api WITH PASSWORD = 'apistrongpassword12!';
+go
+ALTER SERVER ROLE [sysadmin] ADD MEMBER auth;
+go
+ALTER SERVER ROLE [sysadmin] ADD MEMBER api;
+go
+use AuthDb
+go
+CREATE USER auth_service FOR LOGIN auth;
+go
+ALTER USER auth_service WITH DEFAULT_SCHEMA =[dbo];
+go
+ALTER ROLE [db_owner] ADD MEMBER auth_service;
+go
+use ClinicDB
+go
+CREATE USER api_service FOR LOGIN api;
+go
+ALTER USER api_service WITH DEFAULT_SCHEMA =[dbo];
+go
+ALTER ROLE [db_owner] ADD MEMBER api_service;
