@@ -24,5 +24,9 @@ public class RoleCheck : ActionFilterAttribute
         {
             context.Result = new ForbidResult();
         }
+        else
+        {
+            await next();
+        }
     }
 }
