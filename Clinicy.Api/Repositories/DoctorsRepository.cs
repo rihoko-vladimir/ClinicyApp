@@ -66,6 +66,8 @@ public class DoctorsRepository : IDoctorsRepository
         var doctors = await dbConnection.QueryAsync<Doctor>(request.Query, request.DynamicParameters,
             commandTimeout: 5000);
 
+        Console.WriteLine(doctors!.ToList());
+
         return doctors;
     }
 }
